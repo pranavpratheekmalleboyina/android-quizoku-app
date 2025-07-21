@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         multiChoiceButton.setOnClickListener(v -> showConfirmationDialog(
                 "Are you sure that you want to start the Multi Choice Quiz?",
                 () -> {
-                    Intent intent = new Intent(MainActivity.this, TrueFalseQuizActivity.class);
+                    Intent intent = new Intent(MainActivity.this, MultiChoiceQuizActivity.class);
                     startActivity(intent);
                 }
         ));

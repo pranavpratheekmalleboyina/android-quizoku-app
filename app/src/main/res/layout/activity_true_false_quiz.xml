@@ -16,6 +16,18 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp" />
 
+    <ProgressBar
+        android:id="@+id/quiz_progress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="12dp"
+        android:layout_below="@id/question_count"
+        android:layout_marginTop="16dp"
+        android:progress="0"
+        android:max="10"
+        android:progressDrawable="@drawable/progress_bar_drawable" />
+
+
     <TextView
         android:id="@+id/question_text"
         android:layout_width="wrap_content"

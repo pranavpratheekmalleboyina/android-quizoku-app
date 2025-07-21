@@ -6,6 +6,7 @@ import android.media.SoundPool;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.RatingBar;
 
@@ -15,6 +16,7 @@ public class TrueFalseQuizActivity extends AppCompatActivity {
 
     private TextView questionText, questionCount;
     private Button trueButton, falseButton;
+    private ProgressBar progressBar;
 
     private String[] questions = {
             "The sun rises in the east.",
@@ -50,6 +52,8 @@ public class TrueFalseQuizActivity extends AppCompatActivity {
         trueButton = findViewById(R.id.true_button);
         falseButton = findViewById(R.id.false_button);
 
+        progressBar = findViewById(R.id.quiz_progress);
+
         soundPool = new SoundPool.Builder().setMaxStreams(2).build();
         soundCorrect = soundPool.load(this, R.raw.correct_answer_sound, 1);
         soundWrong = soundPool.load(this, R.raw.wrong_answer_sound, 1);
@@ -64,6 +68,7 @@ public class TrueFalseQuizActivity extends AppCompatActivity {
         if (currentQuestion < questions.length) {
             questionText.setText(questions[currentQuestion]);
             questionCount.setText("Question " + (currentQuestion + 1) + " of " + questions.length);
+            progressBar.setProgress(currentQuestion + 1);
         } else {
             showResultDialog();
         }
