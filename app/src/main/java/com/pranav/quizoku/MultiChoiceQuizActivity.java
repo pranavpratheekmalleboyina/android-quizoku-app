@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.media.SoundPool;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -11,10 +13,11 @@ import android.widget.TextView;
 import android.widget.RatingBar;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 public class MultiChoiceQuizActivity extends AppCompatActivity {
 
-    private TextView questionText, questionNumber;
+    private TextView questionText, questionNumber, feedbackText;
     private Button optionA, optionB, optionC, optionD, restartButton, endButton;
     private ProgressBar progressBar;
 
@@ -59,6 +62,7 @@ public class MultiChoiceQuizActivity extends AppCompatActivity {
 
         questionText = findViewById(R.id.mc_question);
         questionNumber = findViewById(R.id.question_number);
+        feedbackText = findViewById(R.id.feedback_text);
         optionA = findViewById(R.id.option_a);
         optionB = findViewById(R.id.option_b);
         optionC = findViewById(R.id.option_c);
@@ -112,21 +116,43 @@ public class MultiChoiceQuizActivity extends AppCompatActivity {
             optionC.setText(options[currentQuestion][2]);
             optionD.setText(options[currentQuestion][3]);
             progressBar.setProgress(currentQuestion + 1);
+            feedbackText.setText("");
         } else {
             showResultDialog();
         }
     }
 
     private void checkAnswer(int selectedIndex) {
+        Button[] optionButtons = {optionA, optionB, optionC, optionD};
+
         if (selectedIndex == correctOptionIndexes[currentQuestion]) {
+            // Correct answer selected
             score++;
             soundPool.play(soundCorrect, 1, 1, 0, 0, 1);
+
+            // Highlight green and disable all
+            optionButtons[selectedIndex].setBackgroundTintList(ContextCompat.getColorStateList(this,android.R.color.holo_green_dark));
+            disableAllButtons();
+            feedbackText.setText("Correct!");
+
+            // Delay before loading next question
+            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                currentQuestion++;
+                resetButtonStyles();
+                updateQuestion();
+            }, 1500);
+
         } else {
+            // Wrong answer selected
             soundPool.play(soundWrong, 1, 1, 0, 0, 1);
+
+            // Mark red and disable only that button
+            optionButtons[selectedIndex].setEnabled(false);
+            optionButtons[selectedIndex].setBackgroundTintList(ContextCompat.getColorStateList(this,android.R.color.holo_red_dark));
+            feedbackText.setText("Wrong!");
         }
-        currentQuestion++;
-        updateQuestion();
     }
+
 
     private void showResultDialog() {
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_result_rating, null);
@@ -152,10 +178,34 @@ public class MultiChoiceQuizActivity extends AppCompatActivity {
                     updateQuestion();
                 })
                 .setNegativeButton("Go to the home screen", (dialog, which) -> {
-                    startActivity(new Intent(this, TrueFalseQuizActivity.class));
+                    startActivity(new Intent(this, MainActivity.class));
                     finish();
                 })
                 .setNeutralButton("Exit", (dialog, which) -> finishAffinity())
                 .show();
     }
+
+    private void disableAllButtons() {
+        optionA.setEnabled(false);
+        optionB.setEnabled(false);
+        optionC.setEnabled(false);
+        optionD.setEnabled(false);
+    }
+
+    private void enableAllButtons() {
+        optionA.setEnabled(true);
+        optionB.setEnabled(true);
+        optionC.setEnabled(true);
+        optionD.setEnabled(true);
+    }
+
+    private void resetButtonStyles() {
+        optionA.setBackgroundTintList(ContextCompat.getColorStateList(this,R.color.teal_200));
+        optionB.setBackgroundTintList(ContextCompat.getColorStateList(this,R.color.teal_200));
+        optionC.setBackgroundTintList(ContextCompat.getColorStateList(this,R.color.teal_200));
+        optionD.setBackgroundTintList(ContextCompat.getColorStateList(this,R.color.teal_200));
+
+        enableAllButtons();
+    }
+
 }

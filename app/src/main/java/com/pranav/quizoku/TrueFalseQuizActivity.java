@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.media.SoundPool;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -11,10 +13,11 @@ import android.widget.TextView;
 import android.widget.RatingBar;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 public class TrueFalseQuizActivity extends AppCompatActivity {
 
-    private TextView questionText, questionCount;
+    private TextView questionText, questionCount, feedbackText;
     private Button trueButton, falseButton, restartButton, endButton;
     private ProgressBar progressBar;
 
@@ -49,6 +52,7 @@ public class TrueFalseQuizActivity extends AppCompatActivity {
 
         questionText = findViewById(R.id.question_text);
         questionCount = findViewById(R.id.question_count);
+        feedbackText = findViewById(R.id.feedback_text);
         trueButton = findViewById(R.id.true_button);
         falseButton = findViewById(R.id.false_button);
         restartButton = findViewById(R.id.restart_button);
@@ -62,8 +66,8 @@ public class TrueFalseQuizActivity extends AppCompatActivity {
 
         updateQuestion();
 
-        trueButton.setOnClickListener(v -> checkAnswer(true));
-        falseButton.setOnClickListener(v -> checkAnswer(false));
+        trueButton.setOnClickListener(v -> checkAnswer(true,v));
+        falseButton.setOnClickListener(v -> checkAnswer(false,v));
 
         restartButton.setOnClickListener(v -> {
             new AlertDialog.Builder(this)
@@ -73,6 +77,7 @@ public class TrueFalseQuizActivity extends AppCompatActivity {
                         currentQuestion = 0;
                         score = 0;
                         updateQuestion();
+                        enableButtons();
                     })
                     .setNegativeButton("No", null)
                     .show();
@@ -94,20 +99,30 @@ public class TrueFalseQuizActivity extends AppCompatActivity {
             questionText.setText(questions[currentQuestion]);
             questionCount.setText("Question " + (currentQuestion + 1) + " of " + questions.length);
             progressBar.setProgress(currentQuestion + 1);
+            enableButtons();
         } else {
             showResultDialog();
         }
     }
 
-    private void checkAnswer(boolean userAnswer) {
+    private void checkAnswer(boolean userAnswer, View v) {
+        Button clickedButton = (Button) v;
         if (userAnswer == answers[currentQuestion]) {
             score++;
             soundPool.play(soundCorrect, 1, 1, 0, 0, 1);
+            clickedButton.setBackgroundTintList(ContextCompat.getColorStateList(this,android.R.color.holo_green_dark));
+            feedbackText.setText("Correct!");
         } else {
             soundPool.play(soundWrong, 1, 1, 0, 0, 1);
+            clickedButton.setBackgroundTintList(ContextCompat.getColorStateList(this,android.R.color.holo_red_dark));
+            feedbackText.setText("Wrong!");
         }
-        currentQuestion++;
-        updateQuestion();
+        disableButtons();
+        // Delay before loading next question
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            currentQuestion++;
+            updateQuestion();
+        }, 1500);
     }
 
     private void showResultDialog() {
@@ -134,6 +149,7 @@ public class TrueFalseQuizActivity extends AppCompatActivity {
                     currentQuestion = 0;
                     score = 0;
                     updateQuestion();
+                    enableButtons();
                 })
                 .setNegativeButton("Go to the home screen", (dialog, which) -> {
                     Intent intent = new Intent(this, MainActivity.class);
@@ -142,5 +158,18 @@ public class TrueFalseQuizActivity extends AppCompatActivity {
                 })
                 .setNeutralButton("Exit", (dialog, which) -> finishAffinity())
                 .show();
+    }
+
+    private void enableButtons(){
+        trueButton.setEnabled(true);
+        falseButton.setEnabled(true);
+        feedbackText.setText("");
+        trueButton.setBackgroundTintList(ContextCompat.getColorStateList(this,R.color.teal_200));
+        falseButton.setBackgroundTintList(ContextCompat.getColorStateList(this,R.color.teal_200));
+    }
+
+    private void disableButtons(){
+        trueButton.setEnabled(false);
+        falseButton.setEnabled(false);
     }
 }
