@@ -18,6 +18,16 @@
         android:label="@string/app_name"
         android:exported="false"
         android:theme="@style/Theme.Quizoku" />
+        <activity
+        android:name=".TrueFalseQuizActivity"
+        android:label="@string/app_name"
+        android:exported="false"
+        android:theme="@style/Theme.Quizoku" />
+        <activity
+        android:name=".MultiChoiceQuizActivity"
+        android:label="@string/app_name"
+        android:exported="false"
+        android:theme="@style/Theme.Quizoku" />
     <activity
         android:name=".SplashActivity"
         android:label="@string/app_name"
