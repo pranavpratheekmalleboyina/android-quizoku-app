@@ -15,7 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class TrueFalseQuizActivity extends AppCompatActivity {
 
     private TextView questionText, questionCount;
-    private Button trueButton, falseButton;
+    private Button trueButton, falseButton, restartButton, endButton;
     private ProgressBar progressBar;
 
     private String[] questions = {
@@ -51,6 +51,8 @@ public class TrueFalseQuizActivity extends AppCompatActivity {
         questionCount = findViewById(R.id.question_count);
         trueButton = findViewById(R.id.true_button);
         falseButton = findViewById(R.id.false_button);
+        restartButton = findViewById(R.id.restart_button);
+        endButton = findViewById(R.id.end_button);
 
         progressBar = findViewById(R.id.quiz_progress);
 
@@ -62,6 +64,29 @@ public class TrueFalseQuizActivity extends AppCompatActivity {
 
         trueButton.setOnClickListener(v -> checkAnswer(true));
         falseButton.setOnClickListener(v -> checkAnswer(false));
+
+        restartButton.setOnClickListener(v -> {
+            new AlertDialog.Builder(this)
+                    .setTitle("End Quiz")
+                    .setMessage("Are you sure you want to end the quiz early? You would lose your progress.")
+                    .setPositiveButton("Yes", (dialog, which) -> {
+                        currentQuestion = 0;
+                        score = 0;
+                        updateQuestion();
+                    })
+                    .setNegativeButton("No", null)
+                    .show();
+        });
+
+        endButton.setOnClickListener(v -> {
+            new AlertDialog.Builder(this)
+                    .setTitle("End Quiz")
+                    .setMessage("Are you sure you want to end the quiz early? You would lose your progress.")
+                    .setPositiveButton("Yes", (dialog, which) -> showResultDialog())
+                    .setNegativeButton("No", null)
+                    .show();
+        });
+
     }
 
     private void updateQuestion() {

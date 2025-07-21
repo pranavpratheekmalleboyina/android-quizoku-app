@@ -15,7 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class MultiChoiceQuizActivity extends AppCompatActivity {
 
     private TextView questionText, questionNumber;
-    private Button optionA, optionB, optionC, optionD;
+    private Button optionA, optionB, optionC, optionD, restartButton, endButton;
     private ProgressBar progressBar;
 
     private String[] questions = {
@@ -64,6 +64,9 @@ public class MultiChoiceQuizActivity extends AppCompatActivity {
         optionC = findViewById(R.id.option_c);
         optionD = findViewById(R.id.option_d);
 
+        restartButton = findViewById(R.id.restart_button);
+        endButton = findViewById(R.id.end_button);
+
         progressBar = findViewById(R.id.quiz_progress);
 
         soundPool = new SoundPool.Builder().setMaxStreams(2).build();
@@ -76,6 +79,28 @@ public class MultiChoiceQuizActivity extends AppCompatActivity {
         optionB.setOnClickListener(v -> checkAnswer(1));
         optionC.setOnClickListener(v -> checkAnswer(2));
         optionD.setOnClickListener(v -> checkAnswer(3));
+
+        restartButton.setOnClickListener(v -> {
+            new AlertDialog.Builder(this)
+                    .setTitle("End Quiz")
+                    .setMessage("Are you sure you want to end the quiz early? You would lose your progress.")
+                    .setPositiveButton("Yes", (dialog, which) -> {
+                        currentQuestion = 0;
+                        score = 0;
+                        updateQuestion();
+                    })
+                    .setNegativeButton("No", null)
+                    .show();
+        });
+
+        endButton.setOnClickListener(v -> {
+            new AlertDialog.Builder(this)
+                    .setTitle("End Quiz")
+                    .setMessage("Are you sure you want to end the quiz early? You would lose your progress.")
+                    .setPositiveButton("Yes", (dialog, which) -> showResultDialog())
+                    .setNegativeButton("No", null)
+                    .show();
+        });
     }
 
     private void updateQuestion() {

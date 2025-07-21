@@ -27,6 +27,33 @@
         android:max="10"
         android:progressDrawable="@drawable/progress_bar_drawable" />
 
+    <LinearLayout
+        android:id="@+id/control_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/quiz_progress"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/restart_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Restart"
+            android:layout_marginEnd="16dp"
+            android:backgroundTint="@android:color/holo_green_dark"
+            android:textColor="@android:color/white" />
+
+        <Button
+            android:id="@+id/end_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="End Quiz"
+            android:backgroundTint="@android:color/holo_red_dark"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+
 
     <TextView
         android:id="@+id/question_text"
