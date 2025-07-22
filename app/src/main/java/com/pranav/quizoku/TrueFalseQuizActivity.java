@@ -16,6 +16,9 @@ import android.widget.RatingBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TrueFalseQuizActivity extends AppCompatActivity {
 
     private TextView questionText, questionCount, feedbackText;
@@ -24,25 +27,8 @@ public class TrueFalseQuizActivity extends AppCompatActivity {
     private SharedPreferences preferences;
     private Boolean soundOn;
 
-    private String[] questions = {
-            "The sun rises in the east.",
-            "Water boils at 90°C.",
-            "The Earth is flat.",
-            "Python is a snake and a programming language.",
-            "Light travels faster than sound.",
-            "Mount Everest is the tallest mountain on Earth.",
-            "Fish can breathe out of water.",
-            "The Great Wall of China is visible from space.",
-            "Humans have 4 senses.",
-            "The capital of France is Paris."
-    };
-
-    private boolean[] answers = {
-            true, false, false, true, true,
-            true, false, false, false, true
-    };
-
-    private int currentQuestion = 0;
+    private int currentQuestionIndex = 0;
+    private List<QuestionTrueFalse> questionList = new ArrayList<>();
     private int score = 0;
 
     private SoundPool soundPool;
@@ -52,6 +38,8 @@ public class TrueFalseQuizActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_true_false_quiz);
+
+        questionList = TrueFalseQuestionBank.getShuffledQuestions(10);
 
         questionText = findViewById(R.id.question_text);
         questionCount = findViewById(R.id.question_count);
@@ -69,7 +57,7 @@ public class TrueFalseQuizActivity extends AppCompatActivity {
         soundCorrect = soundPool.load(this, R.raw.correct_answer_sound, 1);
         soundWrong = soundPool.load(this, R.raw.wrong_answer_sound, 1);
 
-        updateQuestion();
+        updateQuestion(currentQuestionIndex);
 
         trueButton.setOnClickListener(v -> checkAnswer(true,v));
         falseButton.setOnClickListener(v -> checkAnswer(false,v));
@@ -79,9 +67,9 @@ public class TrueFalseQuizActivity extends AppCompatActivity {
                     .setTitle("End Quiz")
                     .setMessage("Are you sure you want to restart? You would lose your progress.")
                     .setPositiveButton("Yes", (dialog, which) -> {
-                        currentQuestion = 0;
+                        currentQuestionIndex = 0;
                         score = 0;
-                        updateQuestion();
+                        updateQuestion(currentQuestionIndex);
                         enableButtons();
                     })
                     .setNegativeButton("No", null)
@@ -99,11 +87,11 @@ public class TrueFalseQuizActivity extends AppCompatActivity {
 
     }
 
-    private void updateQuestion() {
-        if (currentQuestion < questions.length) {
-            questionText.setText(questions[currentQuestion]);
-            questionCount.setText("Question " + (currentQuestion + 1) + " of " + questions.length);
-            progressBar.setProgress(currentQuestion + 1);
+    private void updateQuestion(int index) {
+        if (index < questionList.size()) {
+            questionText.setText(questionList.get(index).getQuestion());
+            questionCount.setText("Question " + (index + 1) + " of " + questionList.size());
+            progressBar.setProgress(index + 1);
             enableButtons();
         } else {
             showResultDialog();
@@ -112,7 +100,7 @@ public class TrueFalseQuizActivity extends AppCompatActivity {
 
     private void checkAnswer(boolean userAnswer, View v) {
         Button clickedButton = (Button) v;
-        if (userAnswer == answers[currentQuestion]) {
+        if (userAnswer == questionList.get(currentQuestionIndex).getAnswer()) {
             score++;
             if (soundOn){
                 soundPool.play(soundCorrect, 1, 1, 0, 0, 1);
@@ -129,8 +117,8 @@ public class TrueFalseQuizActivity extends AppCompatActivity {
         disableButtons();
         // Delay before loading next question
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            currentQuestion++;
-            updateQuestion();
+            currentQuestionIndex++;
+            updateQuestion(currentQuestionIndex);
         }, 1500);
     }
 
@@ -140,7 +128,7 @@ public class TrueFalseQuizActivity extends AppCompatActivity {
 
         new AlertDialog.Builder(this)
                 .setTitle("Quiz Completed!")
-                .setMessage("Your score: " + score + " / " + questions.length)
+                .setMessage("Your score: " + score + " / " + questionList.size())
                 .setView(dialogView)
                 .setCancelable(false)
                 .setPositiveButton("Submit", (dialog, which) -> {
@@ -155,9 +143,9 @@ public class TrueFalseQuizActivity extends AppCompatActivity {
                 .setMessage("What would you like to do next?")
                 .setCancelable(false)
                 .setPositiveButton("Retry the quiz", (dialog, which) -> {
-                    currentQuestion = 0;
+                    currentQuestionIndex = 0;
                     score = 0;
-                    updateQuestion();
+                    updateQuestion(currentQuestionIndex);
                     enableButtons();
                 })
                 .setNegativeButton("Go to the home screen", (dialog, which) -> {
