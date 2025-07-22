@@ -3,6 +3,7 @@ package com.pranav.quizoku;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,6 +13,7 @@ public class MainActivity extends AppCompatActivity {
     private Button trueFalseButton;
     private Button multiChoiceButton;
     private Button exitButton;
+    private ImageButton settingsButton;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,7 +22,9 @@ public class MainActivity extends AppCompatActivity {
         trueFalseButton = findViewById(R.id.true_false_button);
         multiChoiceButton = findViewById(R.id.multi_choice_button);
         exitButton = findViewById(R.id.exit_button);
+        settingsButton = findViewById(R.id.settings_button);
 
+        // in order to start the true false quiz
         trueFalseButton.setOnClickListener(v -> showConfirmationDialog(
                 "Are you sure that you want to start the True/False Quiz?",
                 () -> {
@@ -29,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
                 }
         ));
 
+        // in order to start the multi choice quiz
         multiChoiceButton.setOnClickListener(v -> showConfirmationDialog(
                 "Are you sure that you want to start the Multi Choice Quiz?",
                 () -> {
@@ -37,12 +42,19 @@ public class MainActivity extends AppCompatActivity {
                 }
         ));
 
+        // to exit from the app
         exitButton.setOnClickListener(v -> showConfirmationDialog(
                 "Are you sure that you want to exit the app?",
                 () -> {
                     finishAffinity();
                 }
-        )); // Exit the app
+        ));
+
+        // to go to the settings page
+        settingsButton.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+            startActivity(intent);
+        });
     }
 
     private void showConfirmationDialog(String message, Runnable onConfirmAction) {

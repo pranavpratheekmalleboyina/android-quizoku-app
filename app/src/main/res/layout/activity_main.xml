@@ -1,11 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/home_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#03A8DA"
     android:padding="24dp">
 
+    <ImageButton
+        android:id="@+id/settings_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_settings"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Settings"
+        android:layout_alignParentEnd="true"
+        app:tint="@android:color/white"
+        android:layout_marginTop="12dp"/>
     <!-- Header (Logo + Title + Tagline) -->
     <LinearLayout
         android:id="@+id/header_layout"
@@ -15,7 +26,6 @@
         android:orientation="vertical"
         android:gravity="center_horizontal"
         android:layout_marginTop="60dp">
-
         <ImageView
             android:id="@+id/logo"
             android:layout_width="120dp"
@@ -50,24 +60,31 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="True / False "
-            android:backgroundTint="@color/teal_200"
-            android:textColor="@android:color/white" />
+            android:drawableStart="@drawable/ic_true_false"
+            android:background="@drawable/button_rounded"
+            android:textColor="@android:color/white"
+            android:paddingHorizontal="25dp"/>
 
         <Button
             android:id="@+id/multi_choice_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Multiple Choice "
-            android:backgroundTint="@color/teal_200"
+            android:drawableStart="@drawable/ic_multi_choice"
+            android:background="@drawable/button_rounded"
             android:textColor="@android:color/white"
-            android:layout_marginBottom="24dp" />
+            android:layout_marginTop="14dp"
+            android:paddingHorizontal="15dp"/>
 
         <Button
             android:id="@+id/exit_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Exit"
-            android:backgroundTint="@android:color/darker_gray"
-            android:textColor="@android:color/white" />
+            android:drawableStart="@drawable/ic_exit"
+            android:background="@drawable/button_rounded_exit"
+            android:textColor="@android:color/white"
+            android:layout_marginTop="14dp"
+            />
     </LinearLayout>
 </RelativeLayout>
