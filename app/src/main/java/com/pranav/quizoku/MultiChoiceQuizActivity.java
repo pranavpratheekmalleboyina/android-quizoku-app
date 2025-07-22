@@ -2,6 +2,7 @@ package com.pranav.quizoku;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,6 +21,8 @@ public class MultiChoiceQuizActivity extends AppCompatActivity {
     private TextView questionText, questionNumber, feedbackText;
     private Button optionA, optionB, optionC, optionD, restartButton, endButton;
     private ProgressBar progressBar;
+    private SharedPreferences preferences;
+    private Boolean soundOn;
 
     private String[] questions = {
             "What is the capital of India?",
@@ -73,6 +76,9 @@ public class MultiChoiceQuizActivity extends AppCompatActivity {
 
         progressBar = findViewById(R.id.quiz_progress);
 
+        preferences = getSharedPreferences("quiz_settings", MODE_PRIVATE);
+        soundOn = preferences.getBoolean("sound_enabled", true);
+
         soundPool = new SoundPool.Builder().setMaxStreams(2).build();
         soundCorrect = soundPool.load(this, R.raw.correct_answer_sound, 1);
         soundWrong = soundPool.load(this, R.raw.wrong_answer_sound, 1);
@@ -87,7 +93,7 @@ public class MultiChoiceQuizActivity extends AppCompatActivity {
         restartButton.setOnClickListener(v -> {
             new AlertDialog.Builder(this)
                     .setTitle("End Quiz")
-                    .setMessage("Are you sure you want to end the quiz early? You would lose your progress.")
+                    .setMessage("Are you sure you want to restart? You would lose your progress.")
                     .setPositiveButton("Yes", (dialog, which) -> {
                         currentQuestion = 0;
                         score = 0;
@@ -101,7 +107,7 @@ public class MultiChoiceQuizActivity extends AppCompatActivity {
             new AlertDialog.Builder(this)
                     .setTitle("End Quiz")
                     .setMessage("Are you sure you want to end the quiz early? You would lose your progress.")
-                    .setPositiveButton("Yes", (dialog, which) -> showResultDialog())
+                    .setPositiveButton("Yes", (dialog, which) -> showPostQuizOptions())
                     .setNegativeButton("No", null)
                     .show();
         });
@@ -128,7 +134,9 @@ public class MultiChoiceQuizActivity extends AppCompatActivity {
         if (selectedIndex == correctOptionIndexes[currentQuestion]) {
             // Correct answer selected
             score++;
-            soundPool.play(soundCorrect, 1, 1, 0, 0, 1);
+            if (soundOn){
+                soundPool.play(soundCorrect, 1, 1, 0, 0, 1);
+            }
 
             // Highlight green and disable all
             optionButtons[selectedIndex].setBackgroundTintList(ContextCompat.getColorStateList(this,android.R.color.holo_green_dark));
@@ -144,7 +152,9 @@ public class MultiChoiceQuizActivity extends AppCompatActivity {
 
         } else {
             // Wrong answer selected
-            soundPool.play(soundWrong, 1, 1, 0, 0, 1);
+            if (soundOn){
+                soundPool.play(soundWrong, 1, 1, 0, 0, 1);
+            }
 
             // Mark red and disable only that button
             optionButtons[selectedIndex].setEnabled(false);

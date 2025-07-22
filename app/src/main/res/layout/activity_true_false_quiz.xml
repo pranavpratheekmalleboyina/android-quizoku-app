@@ -63,16 +63,18 @@
         android:textColor="@android:color/white"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:layout_centerInParent="true"
         android:gravity="center"
-        android:padding="24dp" />
+        android:layout_below="@id/question_count"
+        android:layout_centerHorizontal="true"
+        android:padding="24dp"
+        android:layout_marginTop="120dp"/>
 
     <LinearLayout
         android:id="@+id/button_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/question_text"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="18dp"
         android:gravity="center"
         android:orientation="horizontal"
         android:layout_centerHorizontal="true">

@@ -10,9 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button trueFalseButton;
-    private Button multiChoiceButton;
-    private Button exitButton;
+    private Button trueFalseButton,multiChoiceButton,exitButton;
     private ImageButton settingsButton;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -28,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         trueFalseButton.setOnClickListener(v -> showConfirmationDialog(
                 "Are you sure that you want to start the True/False Quiz?",
                 () -> {
-                    Intent intent = new Intent(MainActivity.this, TrueFalseQuizActivity.class);
+                    Intent intent = new Intent(MainActivity.this, TrueFalseQuizInstructionsActivity.class);
                     startActivity(intent);
                 }
         ));
@@ -37,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         multiChoiceButton.setOnClickListener(v -> showConfirmationDialog(
                 "Are you sure that you want to start the Multi Choice Quiz?",
                 () -> {
-                    Intent intent = new Intent(MainActivity.this, MultiChoiceQuizActivity.class);
+                    Intent intent = new Intent(MainActivity.this, MultiChoiceQuizInstructionsActivity.class);
                     startActivity(intent);
                 }
         ));

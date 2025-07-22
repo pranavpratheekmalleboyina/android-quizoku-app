@@ -1,60 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="24dp"
+    android:background="@color/blue"
     android:gravity="center_horizontal"
-    android:background="?android:colorBackground">
+    android:orientation="vertical"
+    android:padding="24dp">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:text="App Settings"
         android:textSize="24sp"
-        android:textStyle="bold"
-        android:layout_marginTop="10dp" />
+        android:textStyle="bold" />
 
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/theme_switch"
+    <ImageButton
+        android:id="@+id/back_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Dark Mode  "
-        android:textSize="18sp"
-        android:layout_marginTop="24dp" />
+        android:layout_gravity="left"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Back"
+        android:src="@drawable/ic_back_arrow"
+        app:tint="@android:color/white" />
+
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/sound_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Enable Sounds  "
+        android:textSize="18sp" />
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/instruction_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
         android:text="Show Instructions for Quiz mode  "
-        android:textSize="18sp"
-        android:layout_marginTop="12dp"/>
+        android:textSize="18sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?android:colorBackground"
+        android:background="@color/blue"
         android:gravity="center_horizontal"
         android:orientation="horizontal"
         android:padding="24dp">
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/saveButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableStart="@drawable/ic_save"
             android:layout_marginEnd="12dp"
+            android:drawableStart="@drawable/ic_save"
+            android:background="@drawable/button_rounded"
+            android:paddingHorizontal="15dp"
             android:text="Save" />
 
         <Button
-            android:id="@+id/button4"
+            android:id="@+id/resetButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawableStart="@drawable/ic_reset"
+            android:background="@drawable/button_rounded"
+            android:paddingHorizontal="15dp"
             android:text="Default" />
 
     </LinearLayout>
 
 
-    </LinearLayout>
+</LinearLayout>
