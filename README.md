@@ -1,4 +1,3 @@
-# Quizoku app
 
 # 📱 Quizoku – Android Quiz App
 
@@ -30,9 +29,14 @@ Quizoku challenges users with multiple quiz modes, score tracking, and sound fee
 
 ## 📸 Screenshots
 
- ![Home Screen](screenshots/homescreen.png)
- ![Quiz Instructions](screenshots/quiz_instructions.png)
- ![Quiz Progress](screenshots/quiz_progress.png)
+ ### Home Screen
+ <img src="screenshots/homescreen.png" height="500" />
+
+ ### Quiz Instructions
+ <img src="screenshots/quiz_instructions.png" height="500" />
+
+ ### Quiz Progress
+ <img src="screenshots/quiz_progress.png" height="500" />
 
 
 ## 🛠️ Technologies Used
