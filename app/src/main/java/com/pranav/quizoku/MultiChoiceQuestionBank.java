@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+//class which contains all the questions for the multichoice quiz that would be randomly shuffled and selected
 public class MultiChoiceQuestionBank {
     public static List<QuestionMultiChoice> getShuffledQuestions(int count) {
         List<QuestionMultiChoice> all = new ArrayList<>();

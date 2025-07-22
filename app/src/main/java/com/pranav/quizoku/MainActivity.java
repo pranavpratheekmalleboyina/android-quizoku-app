@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
+    // declare all the components
     private Button trueFalseButton,multiChoiceButton,exitButton;
     private ImageButton settingsButton;
     @Override
@@ -17,12 +18,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //initialising all the comments
         trueFalseButton = findViewById(R.id.true_false_button);
         multiChoiceButton = findViewById(R.id.multi_choice_button);
         exitButton = findViewById(R.id.exit_button);
         settingsButton = findViewById(R.id.settings_button);
 
-        // in order to start the true false quiz
+        // navigates to the instructions page by default as set in the shared preferences screen
         trueFalseButton.setOnClickListener(v -> showConfirmationDialog(
                 "Are you sure that you want to start the True/False Quiz?",
                 () -> {
@@ -31,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
                 }
         ));
 
-        // in order to start the multi choice quiz
+        // navigates to the instructions page by default as set in the shared preferences screen
         multiChoiceButton.setOnClickListener(v -> showConfirmationDialog(
                 "Are you sure that you want to start the Multi Choice Quiz?",
                 () -> {
@@ -55,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    // method for customizing the alert dialog box
     private void showConfirmationDialog(String message, Runnable onConfirmAction) {
         new AlertDialog.Builder(this)
                 .setTitle("Confirmation")

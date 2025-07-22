@@ -13,6 +13,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.RatingBar;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
@@ -21,15 +22,16 @@ import java.util.List;
 
 public class TrueFalseQuizActivity extends AppCompatActivity {
 
+    // declaring the elements
     private TextView questionText, questionCount, feedbackText;
-    private Button trueButton, falseButton, restartButton, endButton;
+    private Button trueButton, falseButton, restartButton, endButton,nextButton;
     private ProgressBar progressBar;
     private SharedPreferences preferences;
     private Boolean soundOn;
 
     private int currentQuestionIndex = 0;
     private List<QuestionTrueFalse> questionList = new ArrayList<>();
-    private int score = 0;
+    private int totalScore = 0;
 
     private SoundPool soundPool;
     private int soundCorrect, soundWrong;
@@ -39,6 +41,7 @@ public class TrueFalseQuizActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_true_false_quiz);
 
+        // initialising the elements
         questionList = TrueFalseQuestionBank.getShuffledQuestions(10);
 
         questionText = findViewById(R.id.question_text);
@@ -48,6 +51,7 @@ public class TrueFalseQuizActivity extends AppCompatActivity {
         falseButton = findViewById(R.id.false_button);
         restartButton = findViewById(R.id.restart_button);
         endButton = findViewById(R.id.end_button);
+        nextButton = findViewById(R.id.nextButton);
 
         progressBar = findViewById(R.id.quiz_progress);
         preferences = getSharedPreferences("quiz_settings", MODE_PRIVATE);
@@ -62,13 +66,14 @@ public class TrueFalseQuizActivity extends AppCompatActivity {
         trueButton.setOnClickListener(v -> checkAnswer(true,v));
         falseButton.setOnClickListener(v -> checkAnswer(false,v));
 
+        // in order to restart the quiz in between
         restartButton.setOnClickListener(v -> {
             new AlertDialog.Builder(this)
                     .setTitle("End Quiz")
                     .setMessage("Are you sure you want to restart? You would lose your progress.")
                     .setPositiveButton("Yes", (dialog, which) -> {
                         currentQuestionIndex = 0;
-                        score = 0;
+                        totalScore = 0;
                         updateQuestion(currentQuestionIndex);
                         enableButtons();
                     })
@@ -76,6 +81,7 @@ public class TrueFalseQuizActivity extends AppCompatActivity {
                     .show();
         });
 
+        // in order to end the quiz session
         endButton.setOnClickListener(v -> {
             new AlertDialog.Builder(this)
                     .setTitle("End Quiz")
@@ -85,29 +91,52 @@ public class TrueFalseQuizActivity extends AppCompatActivity {
                     .show();
         });
 
+        // in order to go to the next question
+        nextButton.setOnClickListener(v -> loadQuestion());
+
+        // in order to prevent the user from going back to the previos screen on back button press
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                // Option 1: Do nothing to completely block back press
+                // (No code here)
+            }
+        });
+
     }
 
+    private void loadQuestion(){
+        if(currentQuestionIndex == questionList.size() - 1 ){
+            showResultDialog();
+        }else{
+            currentQuestionIndex++;
+            updateQuestion(currentQuestionIndex);
+        }
+    }
     private void updateQuestion(int index) {
-        if (index < questionList.size()) {
+            nextButton.setEnabled(false);
             questionText.setText(questionList.get(index).getQuestion());
             questionCount.setText("Question " + (index + 1) + " of " + questionList.size());
             progressBar.setProgress(index + 1);
             enableButtons();
-        } else {
-            showResultDialog();
-        }
+            feedbackText.setText("");
+            if(index == questionList.size() - 1){
+                nextButton.setText("View Result");
+            }
     }
 
     private void checkAnswer(boolean userAnswer, View v) {
         Button clickedButton = (Button) v;
+        nextButton.setEnabled(true);
         if (userAnswer == questionList.get(currentQuestionIndex).getAnswer()) {
-            score++;
+            totalScore+= 10;
             if (soundOn){
                 soundPool.play(soundCorrect, 1, 1, 0, 0, 1);
             }
             clickedButton.setBackgroundTintList(ContextCompat.getColorStateList(this,android.R.color.holo_green_dark));
             feedbackText.setText("Correct!");
         } else {
+            totalScore -= 5;
             if (soundOn){
                 soundPool.play(soundWrong, 1, 1, 0, 0, 1);
             }
@@ -115,11 +144,6 @@ public class TrueFalseQuizActivity extends AppCompatActivity {
             feedbackText.setText("Wrong!");
         }
         disableButtons();
-        // Delay before loading next question
-        new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            currentQuestionIndex++;
-            updateQuestion(currentQuestionIndex);
-        }, 1500);
     }
 
     private void showResultDialog() {
@@ -128,7 +152,7 @@ public class TrueFalseQuizActivity extends AppCompatActivity {
 
         new AlertDialog.Builder(this)
                 .setTitle("Quiz Completed!")
-                .setMessage("Your score: " + score + " / " + questionList.size())
+                .setMessage("Your totalScore: " + totalScore + " / " + (questionList.size()*10))
                 .setView(dialogView)
                 .setCancelable(false)
                 .setPositiveButton("Submit", (dialog, which) -> {
@@ -144,7 +168,7 @@ public class TrueFalseQuizActivity extends AppCompatActivity {
                 .setCancelable(false)
                 .setPositiveButton("Retry the quiz", (dialog, which) -> {
                     currentQuestionIndex = 0;
-                    score = 0;
+                    totalScore = 0;
                     updateQuestion(currentQuestionIndex);
                     enableButtons();
                 })

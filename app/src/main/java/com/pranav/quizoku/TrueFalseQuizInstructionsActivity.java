@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class TrueFalseQuizInstructionsActivity extends AppCompatActivity {
 
+    // declaring the elements
     private SharedPreferences preferences;
     private CheckBox dontRemindCheckbox;
     private Button startQuizButton;
@@ -31,7 +32,8 @@ public class TrueFalseQuizInstructionsActivity extends AppCompatActivity {
 
         TextView instructionText = findViewById(R.id.instruction_text);
         instructionText.setText("                       INSTRUCTIONS\n\n• You will be asked a total of 10 statements.\n• Choose 'True' or 'False' for each one." +
-                "\n• You cannot go back to the previous question.\n• You can restart or quit from the quiz anytime." +
+                "\n• Each correct answer rewards you 10 points. \n•Each incorrect answer deducts 5 points from your score \n•You cannot go back to the previous question." +
+                "\n• You can restart or quit from the quiz anytime." +
                 "\n• Your score will be displayed at the end. \n\n Happy Learning!");
 
         dontRemindCheckbox = findViewById(R.id.dont_remind_checkbox);

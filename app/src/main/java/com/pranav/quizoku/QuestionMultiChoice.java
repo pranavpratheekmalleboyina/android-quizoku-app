@@ -1,5 +1,6 @@
 package com.pranav.quizoku;
 
+// model for the multichoice quiz questions
 public class QuestionMultiChoice {
     private final String question;
     private final String[] options;

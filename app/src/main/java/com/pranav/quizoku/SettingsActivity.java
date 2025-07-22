@@ -16,6 +16,7 @@ import androidx.appcompat.widget.SwitchCompat;
 
 public class SettingsActivity extends AppCompatActivity {
 
+    // declaring all the elements
     private SwitchCompat soundSwitch, instructionSwitch;
     private SharedPreferences preferences;
     private ImageButton backButton;
@@ -28,6 +29,7 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+        //initialising all the elements
         soundSwitch = findViewById(R.id.sound_switch);
         instructionSwitch = findViewById(R.id.instruction_switch);
 
@@ -35,7 +37,7 @@ public class SettingsActivity extends AppCompatActivity {
         resetButton = findViewById(R.id.resetButton);
         saveButton = findViewById(R.id.saveButton);
 
-        // Set saved state
+        // Setting the toggles to true by default
         soundSwitch.setChecked(preferences.getBoolean("sound_enabled", true));
         instructionSwitch.setChecked(preferences.getBoolean("show_instructions", true));
 
@@ -50,8 +52,10 @@ public class SettingsActivity extends AppCompatActivity {
 
         backButton.setOnClickListener(v -> finish()); // Go back\
 
+        // in order to reset the preferences back to default
         resetButton.setOnClickListener(v ->  resetToDefaults());
 
+        // in order to save the new preferences of the user
         saveButton.setOnClickListener(v -> saveSettings());
     }
 

@@ -1,5 +1,6 @@
 package com.pranav.quizoku;
 
+// model for the true false quiz questions
 public class QuestionTrueFalse {
     private final String question;
     private final boolean answer;

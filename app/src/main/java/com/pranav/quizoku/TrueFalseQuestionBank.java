@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+// the question bank for the true false quiz questions which would get shuffled and displayed
 public class TrueFalseQuestionBank {
     public static List<QuestionTrueFalse> getShuffledQuestions(int count) {
         List<QuestionTrueFalse> all = new ArrayList<>();
